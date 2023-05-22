@@ -145,6 +145,10 @@ ALTER TABLE ONLY public.valid_tokens ALTER COLUMN id SET DEFAULT nextval('public
 --
 
 INSERT INTO public.shortened_urls VALUES (1, 1, 'assdmtksn6as16', 'https://github.com/Lukasbn/projeto17-shortly', 0, '2023-05-21');
+INSERT INTO public.shortened_urls VALUES (3, 2, '5e2CtwpBp13_BfsGwuBtq', 'asdasdasd', 0, '2023-05-21');
+INSERT INTO public.shortened_urls VALUES (4, 2, 'yVEub9AGSRlIHPPcdL0xc', 'asdasdasd', 0, '2023-05-21');
+INSERT INTO public.shortened_urls VALUES (5, 2, 'RWdVEII9Vt-xChrz57k6p', 'https://www.youtube.com/watch?v=l62HieCV-Ps&ab_channel=LeoPerfeito', 0, '2023-05-21');
+INSERT INTO public.shortened_urls VALUES (6, 3, 'bLv6Lvgx7UmZf2JF7PAix', 'https://www.youtube.com/shorts/OWnqaauHUuw', 0, '2023-05-21');
 
 
 --
@@ -152,6 +156,8 @@ INSERT INTO public.shortened_urls VALUES (1, 1, 'assdmtksn6as16', 'https://githu
 --
 
 INSERT INTO public.users VALUES (1, 'joaquim', 'joaquim@quinzin.com', '123456789', '2023-05-21');
+INSERT INTO public.users VALUES (2, 'joaquim', 'joaquim@quinzinho.com', '$2b$10$OeNtwPI4M7BDpH/SXrJ2Pe9.Ua52IbvOGdo/1QOXe0xvWMb8J82oG', '2023-05-21');
+INSERT INTO public.users VALUES (3, 'Lucas', 'lucas@lucas.com', '$2b$10$D84dDq.fbOa4wSR8wqc2Hu.3L2auiapKRIZ6siJObygP/WX0.NqBm', '2023-05-21');
 
 
 --
@@ -160,27 +166,30 @@ INSERT INTO public.users VALUES (1, 'joaquim', 'joaquim@quinzin.com', '123456789
 
 INSERT INTO public.valid_tokens VALUES (1, 1, '91aefec6-5c16-4285-ba90-8155b6f8689c', '2023-05-21');
 INSERT INTO public.valid_tokens VALUES (2, 1, '91aefec6-5c16-4285-ba90-8155b6f8689c', '2023-05-21');
+INSERT INTO public.valid_tokens VALUES (3, 2, '1568bc84-b0fe-41a2-b535-5adbf04bd5e6', '2023-05-21');
+INSERT INTO public.valid_tokens VALUES (4, 2, 'd4e82249-541b-4385-9bdb-acfe3820ace0', '2023-05-21');
+INSERT INTO public.valid_tokens VALUES (5, 3, 'd4ce2be9-e20a-4856-a682-49ed7e648bd4', '2023-05-21');
 
 
 --
 -- Name: shortened_urls_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.shortened_urls_id_seq', 2, true);
+SELECT pg_catalog.setval('public.shortened_urls_id_seq', 6, true);
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 1, true);
+SELECT pg_catalog.setval('public.users_id_seq', 3, true);
 
 
 --
 -- Name: valid_tokens_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.valid_tokens_id_seq', 2, true);
+SELECT pg_catalog.setval('public.valid_tokens_id_seq', 5, true);
 
 
 --
