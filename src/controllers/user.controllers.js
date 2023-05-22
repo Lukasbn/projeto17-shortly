@@ -25,7 +25,7 @@ export async function signInPost(req, res) {
     try {
         const registredUser = await db.query(`SELECT id, password FROM users WHERE email = $1;`, [email])
 
-        if (!registredUser.rows[0]) return res.status(404).send("E-mail não cadastrado!")
+        if (!registredUser.rows[0]) return res.status(401).send("E-mail não cadastrado!")
         if (!bcrypt.compareSync(password, registredUser.rows[0].password)) return res.status(401).send("Senha invalida!")
 
         const token = uuid()
