@@ -2,7 +2,6 @@ import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
 import { nanoid } from "nanoid"
-import dayjs from "dayjs"
 import { v4 as uuid } from "uuid"
 import { db } from "./database/database.connction.js"
 import joi from "joi"
@@ -49,6 +48,42 @@ app.post('/signup', async (req,res)=>{
         return res.status(500).send(err.message)
     }
 })
+
+app.post('/signin', async (req,res)=>{
+    const { email, password } = req.body
+
+    const loginSchema = joi.object({
+        email: joi.string().email().required(),
+        password: joi.string().min(3).required()
+    })
+
+    const validation = loginSchema.validate(req.body, {abortEarly: false})
+
+    if (validation.error) {
+        const errors = validation.error.details.map((detail) => detail.message);
+        return res.status(422).send(errors);
+    }
+
+    try{
+        const registredUser = await db.query(`SELECT id, password FROM users WHERE email = $1;`,[email])
+
+        if(!registredUser.rows[0]) return res.status(404).send("E-mail não cadastrado!")
+        if(!bcrypt.compareSync(password,registredUser.rows[0].password)) return res.status(401).send("Senha invalida!")
+        
+        console.log(registredUser.rows[0])
+
+        const token = uuid()
+        
+        await db.query(`INSERT INTO valid_tokens ("userId",token) VALUES ($1,$2);`,[registredUser.rows[0].id,token])
+
+        return res.status(200).send({token: token})
+    }catch (err){
+        return res.status(500).send(err.message)
+    }
+
+})
+
+
 
 const port = process.env.PORT || 5000
 app.listen(port, () => console.log(`app running on port ${port}`))
