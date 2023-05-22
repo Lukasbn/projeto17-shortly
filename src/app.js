@@ -99,19 +99,31 @@ app.post('/urls/shorten', async (req, res) => {
         return res.status(422).send(errors);
     }
 
-    if(!token) return res.status(401).send("Invalid or unsent token")
+    if (!token) return res.status(401).send("Invalid or unsent token")
 
-    try{
-        const user = await db.query(`SELECT "userId" FROM valid_tokens WHERE token = $1;`,[token])
-        if(!user.rows[0]) return res.status(401).send("Invalid or unsent token")
-        
+    try {
+        const user = await db.query(`SELECT "userId" FROM valid_tokens WHERE token = $1;`, [token])
+        if (!user.rows[0]) return res.status(401).send("Invalid or unsent token")
+
         const shortened = nanoid()
-        
-        await db.query(`INSERT INTO shortened_urls ("userId","shortUrl",url) VALUES ($1,$2,$3);`,[user.rows[0].userId,shortened,url])
 
-        const response = await db.query(`SELECT id, "shortUrl" FROM shortened_urls WHERE "shortUrl" = $1;`,[shortened])
+        await db.query(`INSERT INTO shortened_urls ("userId","shortUrl",url) VALUES ($1,$2,$3);`, [user.rows[0].userId, shortened, url])
+
+        const response = await db.query(`SELECT id, "shortUrl" FROM shortened_urls WHERE "shortUrl" = $1;`, [shortened])
 
         res.status(201).send(response.rows[0])
+    } catch (err) {
+        return res.status(500).send(err.message)
+    }
+})
+
+app.get('/urls/:id', async (req, res) => {
+    const { id } = req.params
+
+    try{
+        const response = await db.query(`SELECT id, "shortUrl", url FROM shortened_urls WHERE id = $1`,[id])
+        if(!response.rows[0]) return res.sendStatus(404)
+        res.status(200).send(response.rows[0])
     }catch (err){
         return res.status(500).send(err.message)
     }
