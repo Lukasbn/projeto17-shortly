@@ -103,7 +103,7 @@ app.post('/urls/shorten', async (req, res) => {
 
     try {
         const user = await db.query(`SELECT "userId" FROM valid_tokens WHERE token = $1;`, [token])
-        if (!user.rows[0]) return res.status(401).send("Invalid or unsent token")
+        if (!user.rows[0]) return res.sendStatus(401)
 
         const shortened = nanoid()
 
@@ -144,7 +144,31 @@ app.get('/urls/open/:shortUrl',async (req,res)=>{
     }
 })
 
+app.delete('/urls/:id', async (req,res)=>{
+    const { id } = req.params
+    console.log(id)
+    const { authorization } = req.headers
+    const token = authorization?.replace("Bearer ", "")
 
+    if (!token) return res.status(401).send("Invalid or unsent token")
+
+    try{
+        console.log(id)
+        const user = await db.query(`SELECT "userId" FROM valid_tokens WHERE token = $1;`, [token])
+        if (!user.rows[0]) return res.sendStatus(401)
+
+        const urlOwner = await db.query(`SELECT "userId" FROM shortened_urls WHERE id = $1;`,[id])
+        if (! urlOwner.rows[0]) return res.sendStatus(404)
+
+        if(user.rows[0].userId != urlOwner.rows[0].userId) return res.sendStatus(401)
+
+        await db.query(`DELETE FROM shortened_urls WHERE id = $1`,[id])
+
+        res.sendStatus(204)
+    }catch (err){
+        return res.status(500).send(err.message)
+    }
+})
 
 
 const port = process.env.PORT || 5000
