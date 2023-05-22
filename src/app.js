@@ -70,8 +70,6 @@ app.post('/signin', async (req, res) => {
         if (!registredUser.rows[0]) return res.status(404).send("E-mail não cadastrado!")
         if (!bcrypt.compareSync(password, registredUser.rows[0].password)) return res.status(401).send("Senha invalida!")
 
-        console.log(registredUser.rows[0])
-
         const token = uuid()
 
         await db.query(`INSERT INTO valid_tokens ("userId",token) VALUES ($1,$2);`, [registredUser.rows[0].id, token])
@@ -146,14 +144,12 @@ app.get('/urls/open/:shortUrl',async (req,res)=>{
 
 app.delete('/urls/:id', async (req,res)=>{
     const { id } = req.params
-    console.log(id)
     const { authorization } = req.headers
     const token = authorization?.replace("Bearer ", "")
 
     if (!token) return res.status(401).send("Invalid or unsent token")
 
     try{
-        console.log(id)
         const user = await db.query(`SELECT "userId" FROM valid_tokens WHERE token = $1;`, [token])
         if (!user.rows[0]) return res.sendStatus(401)
 
@@ -170,6 +166,44 @@ app.delete('/urls/:id', async (req,res)=>{
     }
 })
 
+app.get('/users/me',async (req,res)=>{
+    const { authorization } = req.headers
+    const token = authorization?.replace("Bearer ", "")
+
+    if (!token) return res.status(401).send("Invalid or unsent token")
+    try{
+        const user = await db.query(`SELECT "userId" FROM valid_tokens WHERE token = $1;`, [token])
+        if (!user.rows[0]) return res.sendStatus(401)
+
+        const userData = await db.query(`SELECT users.id, users.name, SUM(sh."visitCount") AS "visitCount"
+        FROM users JOIN shortened_urls sh ON sh."userId" = users.id 
+        WHERE users.id = $1  
+        GROUP BY users.id;															 
+        `,[user.rows[0].userId])
+
+        const { rows: shortenedUrls} = await db.query(`SELECT id, "shortUrl", url, "visitCount" 
+        FROM shortened_urls WHERE "userId" = $1;`,[user.rows[0].userId])
+
+        res.status(200).send({...userData.rows[0],shortenedUrls})
+
+    }catch (err){
+        return res.status(500).send(err.message)
+    }
+})
+
+app.get('/ranking',async (req,res)=>{
+    try{
+        const {rows: response} = await db.query(`SELECT users.id, users.name, 
+        COUNT(sh.url) AS "linksCount",SUM(sh."visitCount") AS "visitCount" 
+        FROM users LEFT JOIN shortened_urls sh ON sh."userId" = users.id 
+        GROUP BY users.id ORDER BY "visitCount" DESC LIMIT 10;															 
+        `)
+
+        res.status(200).send(response)
+    }catch (err){
+        return res.status(500).send(err.message)
+    }
+})
 
 const port = process.env.PORT || 5000
 app.listen(port, () => console.log(`app running on port ${port}`))
