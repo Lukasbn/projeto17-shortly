@@ -30,7 +30,7 @@ CREATE TABLE public.shortened_urls (
     "shortUrl" text NOT NULL,
     url text NOT NULL,
     "visitCount" integer DEFAULT 0 NOT NULL,
-    "createdAt" date DEFAULT now() NOT NULL
+    "createdAt" timestamp without time zone DEFAULT now() NOT NULL
 );
 
 
@@ -63,7 +63,7 @@ CREATE TABLE public.users (
     name character varying(50) NOT NULL,
     email text NOT NULL,
     password text NOT NULL,
-    "createdAt" date DEFAULT now() NOT NULL
+    "createdAt" timestamp without time zone DEFAULT now() NOT NULL
 );
 
 
@@ -95,7 +95,7 @@ CREATE TABLE public.valid_tokens (
     id integer NOT NULL,
     "userId" integer NOT NULL,
     token uuid NOT NULL,
-    "createdAt" date DEFAULT now() NOT NULL
+    "createdAt" timestamp without time zone DEFAULT now() NOT NULL
 );
 
 
@@ -144,52 +144,45 @@ ALTER TABLE ONLY public.valid_tokens ALTER COLUMN id SET DEFAULT nextval('public
 -- Data for Name: shortened_urls; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.shortened_urls VALUES (1, 1, 'assdmtksn6as16', 'https://github.com/Lukasbn/projeto17-shortly', 0, '2023-05-21');
-INSERT INTO public.shortened_urls VALUES (3, 2, '5e2CtwpBp13_BfsGwuBtq', 'asdasdasd', 0, '2023-05-21');
-INSERT INTO public.shortened_urls VALUES (4, 2, 'yVEub9AGSRlIHPPcdL0xc', 'asdasdasd', 0, '2023-05-21');
-INSERT INTO public.shortened_urls VALUES (5, 2, 'RWdVEII9Vt-xChrz57k6p', 'https://www.youtube.com/watch?v=l62HieCV-Ps&ab_channel=LeoPerfeito', 0, '2023-05-21');
-INSERT INTO public.shortened_urls VALUES (6, 3, 'bLv6Lvgx7UmZf2JF7PAix', 'https://www.youtube.com/shorts/OWnqaauHUuw', 0, '2023-05-21');
+INSERT INTO public.shortened_urls VALUES (2, 1, 'fZpHgv21v08mcOCXYXkv7', 'https://dashboard.render.com/web/srv-chkp60e4dadfmsn411c0', 0, '2023-05-22 12:52:28.661478');
+INSERT INTO public.shortened_urls VALUES (3, 1, 'qLj6ITHD8zFAK7xHIjvcb', 'https://dashboard.render.com/web/srv-chkp60e4dadfmsn411c0', 0, '2023-05-22 12:52:29.099717');
+INSERT INTO public.shortened_urls VALUES (4, 1, 'VMDfitnqk4Yf68laj-Uf7', 'https://dashboard.render.com/web/srv-chkp60e4dadfmsn411c0', 0, '2023-05-22 12:52:29.549179');
 
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.users VALUES (1, 'joaquim', 'joaquim@quinzin.com', '123456789', '2023-05-21');
-INSERT INTO public.users VALUES (2, 'joaquim', 'joaquim@quinzinho.com', '$2b$10$OeNtwPI4M7BDpH/SXrJ2Pe9.Ua52IbvOGdo/1QOXe0xvWMb8J82oG', '2023-05-21');
-INSERT INTO public.users VALUES (3, 'Lucas', 'lucas@lucas.com', '$2b$10$D84dDq.fbOa4wSR8wqc2Hu.3L2auiapKRIZ6siJObygP/WX0.NqBm', '2023-05-21');
+INSERT INTO public.users VALUES (1, 'Lucas', 'lucas@lucas.com', '$2b$10$648DYYqobYl1MTunS55lROPpveUCFL4c1sgbTFCk.ZYXGtLApVLrq', '2023-05-22 12:50:16.791219');
 
 
 --
 -- Data for Name: valid_tokens; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.valid_tokens VALUES (1, 1, '91aefec6-5c16-4285-ba90-8155b6f8689c', '2023-05-21');
-INSERT INTO public.valid_tokens VALUES (2, 1, '91aefec6-5c16-4285-ba90-8155b6f8689c', '2023-05-21');
-INSERT INTO public.valid_tokens VALUES (3, 2, '1568bc84-b0fe-41a2-b535-5adbf04bd5e6', '2023-05-21');
-INSERT INTO public.valid_tokens VALUES (4, 2, 'd4e82249-541b-4385-9bdb-acfe3820ace0', '2023-05-21');
-INSERT INTO public.valid_tokens VALUES (5, 3, 'd4ce2be9-e20a-4856-a682-49ed7e648bd4', '2023-05-21');
+INSERT INTO public.valid_tokens VALUES (1, 1, '194e8c70-f61c-47e5-bfc2-0d83935d916f', '2023-05-22 12:50:22.809353');
+INSERT INTO public.valid_tokens VALUES (2, 1, '20a63b7c-73d3-40a6-99dd-2a2ff6ec7032', '2023-05-22 12:50:23.54962');
 
 
 --
 -- Name: shortened_urls_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.shortened_urls_id_seq', 6, true);
+SELECT pg_catalog.setval('public.shortened_urls_id_seq', 4, true);
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 3, true);
+SELECT pg_catalog.setval('public.users_id_seq', 1, true);
 
 
 --
 -- Name: valid_tokens_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.valid_tokens_id_seq', 5, true);
+SELECT pg_catalog.setval('public.valid_tokens_id_seq', 2, true);
 
 
 --
